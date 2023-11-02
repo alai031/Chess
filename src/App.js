@@ -103,22 +103,29 @@ function App() {
       <div className="container">
 
         <div className="top">
-          CHESS
-          {winner === 1 && 
-            <div id="player1Winner">
-              Player 1 wins!
-            </div>
-          }
-          {winner === 2 && 
-            <div id="computerWinner">
-              Computer wins!
-            </div>
-          }
-          {winner === 3 && 
-            <div id="player2Winner">
-              Player 2 wins!
-            </div>
-          }
+
+          <div id="title">
+            CHESS
+          </div>
+
+          <div className="winner">
+            {winner === 1 && 
+              <div id="player1Winner">
+                Player 1 wins!
+              </div>
+            }
+            {winner === 2 && 
+              <div id="computerWinner">
+                Computer wins!
+              </div>
+            }
+            {winner === 3 && 
+              <div id="player2Winner">
+                Player 2 wins!
+              </div>
+            }
+          </div>  
+
         </div>
 
         <div className="mid">
@@ -145,7 +152,6 @@ function App() {
           {option !== 0 && 
             <button className="b3" onClick={menu}>Back to menu</button>
           }
-          BOTTOM
         </div>
        
       </div>
