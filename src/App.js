@@ -2,21 +2,23 @@ import './App.css'
 import React, {useState} from 'react';
 import {Chessboard} from 'react-chessboard';
 import {Chess} from 'chess.js';
+import pawn from './images/pawn.png';
 
 function App() {
 
   const [option, setOption] = useState(0); //1 is play vs computer, 2 is play vs player
-  const [winner, setWinner] = useState(0); //1 means player1 is the winner, 2 means the computer is, 3 means player 2 is the winner
+  const [winner, setWinner] = useState(0); //1 means player 1 is the winner, 2 means the computer is, 3 means player 2 is the winner
   const [game, setGame] = useState(new Chess());
 
   const makeMove = (move) => {
+    console.log(game);
     const possibleMoves = game.moves();
     console.log("Player possible moves: ", possibleMoves);
 
     try{
       game.move(move);
-      if (game.isCheckmate()){
-        console.log("checkmate");
+      if (game.isCheckmate() || game.isDraw()){
+        console.log("checkmate or draw");
         if (game.turn() === 'b')
           setWinner(1); //Player 1 is the winner
         else{
@@ -41,8 +43,14 @@ function App() {
 
     //exit if the game is over
 
-    if (game.isGameOver() || game.isDraw() || possibleMoves.length === 0)
+    if (game.isGameOver() || game.isDraw() || possibleMoves.length === 0){
+      if (game.turn() === 'b')
+          setWinner(1); 
+      else{
+          setWinner(2); 
+      }  
       return;
+    }
 
     //select random move
 
@@ -57,12 +65,12 @@ function App() {
     const move = makeMove({
       from: source,
       to: target,
-      promotion: "q", //always promote to a queen for example simplicity
+      promotion: "q", //always promote to queen for simplicity 
     });
 
     // illegal move
     if (move === "invalid move"){
-      console.log("Not a valid move. Please try again.") //TODO: Display on game screen
+      console.log("Not a valid move. Please try again.")
       return false;
     }
 
@@ -103,9 +111,11 @@ function App() {
       <div className="container">
 
         <div className="top">
-
           <div id="title">
-            CHESS
+            CHESS <br></br>
+            {option === 0 && 
+            <img id='pawn' src={pawn} alt='pawn img'/>
+            }
           </div>
 
           <div className="winner">
@@ -125,11 +135,9 @@ function App() {
               </div>
             }
           </div>  
-
         </div>
 
         <div className="mid">
-
           {option === 0 &&
             <div id="options">
               <button className="b1" onClick={playComputer}>PLAY AGAINST COMPUTER</button>
@@ -137,12 +145,13 @@ function App() {
             </div>
           }
           {option !== 0 && 
-            <Chessboard
-            position = {game.fen()}
-            onPieceDrop = {onDrop}
-            />
+            <div id="board">
+             <Chessboard
+              position = {game.fen()}
+              onPieceDrop = {onDrop}
+              /> 
+            </div>
           }
-
         </div>
 
         <div className="bottom">
